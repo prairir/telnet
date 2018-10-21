@@ -37,10 +37,15 @@ public class Server{
 				open();
 				if(serviceSocket != null){
 						while(true){
-						
-						
+								String input = recieve(); 
+								if(input.toLowerCase().equals(close)){
+										break;
+								}
+								String output = tty(input);
+								send(output);
 						}
 				}
+				close();
 		}
 		
 		public void open(){
