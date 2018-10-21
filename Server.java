@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Scanner;
 import java.net.*;
 
 public class Server{
@@ -33,7 +34,13 @@ public class Server{
 
 		//functions
 		public void run(){
-		
+				open();
+				if(serviceSocket != null){
+						while(true){
+						
+						
+						}
+				}
 		}
 		
 		public void open(){
@@ -65,7 +72,8 @@ public class Server{
 		}
 
 		public String recieve(){
-				return "hello";
+				Scanner s = new Scanner(take).useDelimiter("\\A");
+				return s.hasNext() ? s.next() : "";
 		}
 
 		private String tty(String input){
