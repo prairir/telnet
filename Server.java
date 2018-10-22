@@ -9,7 +9,7 @@ public class Server{
 		private ServerSocket sock;
 		private Socket serviceSocket = null;
 		private DataInputStream take;
-		private PrintStream give;
+		private PrintWriter give;
 		
 		//constructors
 		public Server(int port, String close){
@@ -53,7 +53,7 @@ public class Server{
 						sock = new ServerSocket(port);
 						serviceSocket = sock.accept();
 						take = new DataInputStream(serviceSocket.getInputStream());
-						give = new PrintStream(serviceSocket.getOutputStream());
+						give = new PrintWriter(serviceSocket.getOutputStream());
 				}
 				catch(IOException e){
 						System.out.println(e);
@@ -73,6 +73,7 @@ public class Server{
 		}
 		
 		public void send(String text){
+				give.print(text);
 
 		}
 
