@@ -74,7 +74,6 @@ public class Server{
 		
 		public void send(String text){
 				give.print(text);
-
 		}
 
 		public String recieve(){
@@ -83,7 +82,29 @@ public class Server{
 		}
 
 		private String tty(String input){
-				return "helo";
+				String output = "";
+				try{
+						ProcessBuilder pb = new ProcessBuilder();
+						pb.redirectErrorStream(true);
+						pb.command(input);
+						Process p = pb.start();
+						InputStream is = p.getInputStream();
+						BufferedReader br = new BufferedReader(new InputStreamReader(is));
+						String line = null;
+						while ((line = br.readLine()) != null){
+						output += line + "\n";
+						}
+						p.waitFor();
+
+				}
+				catch(InterruptedException ie){
+						System.out.println(ie);
+				
+				}
+				catch(IOException e){
+						System.out.println(e);
+				}
+				return output;
 		}
 }
 
