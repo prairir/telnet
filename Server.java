@@ -78,11 +78,12 @@ public class Server{
 
 		public String recieve(){
 				Scanner s = new Scanner(take).useDelimiter("\\A");
+				System.out.println(s.next());
 				return s.hasNext() ? s.next() : "";
 		}
 
 		private String tty(String input){
-				String output = "";
+				String output = "a";
 				try{
 						ProcessBuilder pb = new ProcessBuilder();
 						pb.redirectErrorStream(true);
