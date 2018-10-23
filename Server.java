@@ -9,7 +9,7 @@ public class Server{
 		private ServerSocket sock;
 		private Socket serviceSocket = null;
 		private DataInputStream take;
-		private PrintWriter give;
+		private Writer give;
 		
 		//constructors
 		public Server(int port, String close){
@@ -38,8 +38,11 @@ public class Server{
 				if(serviceSocket != null){
 						while(true){
 								String input = recieve(); 
-								if(input.toLowerCase().equals(close)){
+								if(input.trim().toLowerCase().equals(close)){
 										break;
+								}
+								if(input.length() >= 2){
+										input = input.substring(0, input.length() - 2);
 								}
 								String output = tty(input);
 								send(output);
@@ -53,7 +56,7 @@ public class Server{
 						sock = new ServerSocket(port);
 						serviceSocket = sock.accept();
 						take = new DataInputStream(serviceSocket.getInputStream());
-						give = new PrintWriter(serviceSocket.getOutputStream());
+						give = new BufferedWriter(new OutputStreamWriter(serviceSocket.getOutputStream(), "UTF-8"));
 				}
 				catch(IOException e){
 						System.out.println(e);
@@ -73,30 +76,34 @@ public class Server{
 		}
 		
 		public void send(String text){
-				give.print(text);
+				try{
+						give.write(text, 0, text.length());
+						give.flush();
+				}
+				catch(IOException e){
+						System.out.println(e);
+				}
 		}
 
 		public String recieve(){
 				Scanner s = new Scanner(take).useDelimiter("\\A");
-				System.out.println(s.next());
 				return s.hasNext() ? s.next() : "";
 		}
 
 		private String tty(String input){
-				String output = "a";
+				String output = "";
 				try{
 						ProcessBuilder pb = new ProcessBuilder();
 						pb.redirectErrorStream(true);
-						pb.command(input);
+						pb.command("/bin/bash", "-c", input);
 						Process p = pb.start();
 						InputStream is = p.getInputStream();
 						BufferedReader br = new BufferedReader(new InputStreamReader(is));
 						String line = null;
 						while ((line = br.readLine()) != null){
-						output += line + "\n";
+								output = output + line;
 						}
 						p.waitFor();
-
 				}
 				catch(InterruptedException ie){
 						System.out.println(ie);
