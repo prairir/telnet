@@ -35,22 +35,20 @@ public class Server{
 		//functions
 		public void run(){
 				open();
-				new Thread(new Runnable(){
-						public void run(){
-						while(serviceSocket != null){
-								String input = recieve(); 
-								if(input.trim().toLowerCase().equals(close)){
-										break;
-								}
-								if(input.length() >= 2){
-										input = input.substring(0, input.length() - 2);
-								}
-								String output = tty(input);
-								send(output);
+				while(serviceSocket != null){
+						String input = recieve(); 
+						System.out.println(input);
+						if(input.trim().toLowerCase().equals(close)){
+								break;
 						}
+						if(input.length() >= 2){
+								input = input.substring(0, input.length() - 2);
+						}
+						String output = tty(input);
+						System.out.println(output);
+						send(output);
+				}
 				close();
-		}
-				}).start();
 		}
 
 		
@@ -115,6 +113,7 @@ public class Server{
 				catch(IOException e){
 						System.out.println(e);
 				}
+				
 				return output;
 		}
 }
