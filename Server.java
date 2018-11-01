@@ -35,8 +35,9 @@ public class Server{
 		//functions
 		public void run(){
 				open();
-				if(serviceSocket != null){
-						while(true){
+				new Thread(new Runnable(){
+						public void run(){
+						while(serviceSocket != null){
 								String input = recieve(); 
 								if(input.trim().toLowerCase().equals(close)){
 										break;
@@ -47,9 +48,11 @@ public class Server{
 								String output = tty(input);
 								send(output);
 						}
-				}
 				close();
 		}
+				}).start();
+		}
+
 		
 		public void open(){
 				try{
